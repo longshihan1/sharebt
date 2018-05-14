@@ -15,7 +15,7 @@ ShareTxt.prototype = {
     }
 };
 
-var TheLetter = function () {
+var TheShareTxt = function () {
     LocalContractStorage.defineMapProperty(this, "data", {
         parse: function (text) {
             return new ShareTxt(text);
@@ -26,7 +26,7 @@ var TheLetter = function () {
     });
 };
 
-TheLetter.prototype ={
+TheShareTxt.prototype ={
     init:function(){
 
     },
@@ -41,17 +41,17 @@ TheLetter.prototype ={
         }
 
         var from = Blockchain.transaction.from;
-        var letterItem = this.data.get(bttitle);
-        if(letterItem){
-            throw new Error("letter has been occupied");
+        var shareBt = this.data.get(bttitle);
+        if(shareBt){
+            throw new Error("shareBT has been occupied");
         }
 
-        letterItem = new ShareTxt();
-        letterItem.author = from;
-        letterItem.bttitle = bttitle;
-        letterItem.btarea = btarea;
+        shareBt = new ShareTxt();
+        shareBt.author = from;
+        shareBt.bttitle = bttitle;
+        shareBt.btarea = btarea;
 
-        this.data.put(bttitle,letterItem);
+        this.data.put(bttitle,shareBt);
     },
 
     get:function(bttitle){
@@ -62,4 +62,4 @@ TheLetter.prototype ={
     }
 }
 
-module.exports = ShareTxt;
+module.exports = TheShareTxt;

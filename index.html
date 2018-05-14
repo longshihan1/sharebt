@@ -9,70 +9,69 @@
 
 </head>
 
-<body>
+<body background="./image/backgroung.webp" style="background-size: cover">
 
-    <script type="text/javascript" src="./dist/nebulas.js"></script>
+<script type="text/javascript" src="./dist/nebulas.js"></script>
 
-    <script type="text/javascript" src="./dist/nebPay.js"></script>
-    <script type="text/javascript" src="./jquery-3.3.1.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="./dist/nebPay.js"></script>
+<script type="text/javascript" src="./jquery-3.3.1.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div style="text-align: center">
+                <h1><font color="#f0ffff"> 分享BT站点</font></h1>
+                <h3><font color="#f0ffff"> 分享互联网精神，共享资源</font></h3>
+            </div>
 
-
-    <div class="container">
-        <div class="row clearfix">
-            <div class="col-md-12 column">
-                <div style="text-align: center">
-                    <h1>分享BT站点</h1>
-                </div>
-
-                <div class="container-fluid">
-                        <div class="row-fluid">
-                            <div class="span12">
-                                 <span class="label">分隔符</span>
-                                <div class="list-group">
-                                    <a class="list-group-item active">查询BT名称</a>
-                                </div>
-                            </div>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="span12" style="margin-top: 20px">
+                        <div class="list-group">
+                            <a class="list-group-item active">查询BT名称</a>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                <div class="input-group col-md-3" style="margin-top:20px">
-                    <input type="text" class="form-control" placeholder="请输入BT名称" id=search_title />
-                    <span class="input-group-btn">
+            <div class="input-group col-md-3" style="margin-top:20px">
+                <input type="text" class="form-control" placeholder="请输入BT名称" id=search_title/>
+                <span class="input-group-btn">
                         <button class="btn btn-info btn-search" id=search>查找</button>
-
                     </span>
-                </div>
-
-
-
-            </div>
-            <div class="row clearfix">
-                <div class="col-md-12 column">
+                <div class="input-group-btn" style="align-content: right">
+                    <a class="btn btn-danger" id=add style="margin-left: 50px">新增种子</a>
                 </div>
             </div>
 
-            <div style="text-align: center">
-                <h1 id=title></h1>
+
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12 column">
             </div>
+        </div>
 
-            <div id=content style="margin-left:20px"></div>
+        <div style="text-align: center">
+            <h1 id=title></h1>
+        </div>
 
-            <div id=author style="text-align: right"></div>
+        <div id=content style="margin-left:20px"></div>
 
+        <div id=author style="text-align: right"></div>
+
+        <div id="add_div" style="display: none">
 
 
             <div class="container-fluid">
-                    <div class="row-fluid">
-                        <div class="span12">
-                             <span class="label">分隔符</span>
-                            <div class="list-group">
-                                <a class="list-group-item active">立即发布</a>
-                            </div>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <div class="list-group" style="margin-top: 20px">
+                            <a class="list-group-item active">BT共享</a>
                         </div>
                     </div>
                 </div>
+            </div>
 
             <div class="input-group" style="margin-left:10px">
                 <span class="input-group-addon">标题</span>
@@ -80,27 +79,25 @@
             </div>
             <div class="input-group" style="margin-top:20px ;margin-left:10px">
                 <span class="input-group-addon">正文</span>
-                <input type="text" class="form-control" placeholder="输入BT链接(可用|隔断)" id=input_content>
+                <input type="text" class="form-control" placeholder="输入BT链接" id=input_content>
             </div>
-            <div  style="text-align: right;margin-top:30px ">
-                    <button class="btn btn-info" id=post>提交</button>
+            <div style="text-align: right;margin-top:30px ">
+                <button class="btn btn-info" id=post>提交</button>
             </div>
-           
-
         </div>
+    </div>
+
+
+</div>
 </body>
-
-
-
-
-
 
 
 <script>
     "use strict";
-    var dappContactAddress = "n1ov7Z5oix23riQKUaVensFie5Tr5UiGmBT";
+    var dappContactAddress = "n22xW52K72t4JZ36fuRhMNTBLKqaSR4uMPB";
     var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
     neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"))
+    var isClick=true
 
 
     var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
@@ -130,7 +127,7 @@
 
         neb.api.call(from, dappContactAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
             var result = resp.result;
-            
+
             if (result === 'null') {
                 $('#btarea').text("没有发现该名称的BT种子，你可以马上上传贡献！");
                 $('#bttitle').text("");
@@ -150,6 +147,18 @@
 
     })
 
+    $('#add').click(function () {
+        if (isClick) {
+            isClick=false;
+            $("#add").text("隐藏新增");
+            $("#add_div").show();
+        } else {
+            isClick=true;
+            $("#add_div").hide();
+            $("#add").text("新增种子");
+        }
+
+    })
 
 
     $('#post').click(function () {
