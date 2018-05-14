@@ -9,7 +9,7 @@
 
 </head>
 
-<body background="./image/backgroung.webp" style="background-size: cover">
+<body background="./image/backgroung.webp" style="background-repeat: no-repeat; background-size: cover">
 
 <script type="text/javascript" src="./dist/nebulas.js"></script>
 
@@ -34,14 +34,17 @@
                     </div>
                 </div>
             </div>
-
-            <div class="input-group col-md-3" style="margin-top:20px">
-                <input type="text" class="form-control" placeholder="请输入BT名称" id=search_title/>
-                <span class="input-group-btn">
-                        <button class="btn btn-info btn-search" id=search>查找</button>
+            <div class="container-fluid">
+                <div class="row-fluid">
+                    <div class="input-group" style="margin-top:20px">
+                        <input type="text" class="form-control input-lg" placeholder="请输入BT名称" id=search_title/>
+                        <span class="input-group-btn">
+                        <button class="btn btn-info btn-success" id=search>查找</button>
                     </span>
-                <div class="input-group-btn" style="align-content: right">
-                    <a class="btn btn-danger" id=add style="margin-left: 50px">新增种子</a>
+                        <div class="input-group-btn" style="align-content: right">
+                            <a class="btn btn-danger" id=add>新增种子</a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -97,7 +100,7 @@
     var dappContactAddress = "n22xW52K72t4JZ36fuRhMNTBLKqaSR4uMPB";
     var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
     neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"))
-    var isClick=true
+    var isClick = true
 
 
     var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
@@ -149,11 +152,11 @@
 
     $('#add').click(function () {
         if (isClick) {
-            isClick=false;
+            isClick = false;
             $("#add").text("隐藏新增");
             $("#add_div").show();
         } else {
-            isClick=true;
+            isClick = true;
             $("#add_div").hide();
             $("#add").text("新增种子");
         }
