@@ -17,81 +17,40 @@
 <script type="text/javascript" src="./jquery-3.3.1.min.js"></script>
 <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 
-<div class="container">
-    <div class="row clearfix">
-        <div class="col-md-12 column">
-            <div style="text-align: center">
-                <h1><font color="#f0ffff"> 分享BT站点</font></h1>
-                <h3><font color="#f0ffff"> 分享互联网精神，共享资源</font></h3>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12" style="text-align: center;margin-top: 40px">
+            <div>
+                <h1 class="text-primary text-center">
+                    <font color="#f0ffff"> 分享BT站点
+                    </font>
+                </h1>
             </div>
 
-            <div class="container-fluid">
-                <div class="row-fluid">
-                    <div class="span12" style="margin-top: 20px">
-                        <div class="list-group">
-                            <a class="list-group-item active">查询BT名称</a>
-                        </div>
+            <div class="col-md-offset-4" style="text-align:center">
+                <form class="bs-example bs-example-form" role="form">
+                    <div class="input-group col-xs-4" style="text-align:center;margin-top:20px;">
+                        <input type="text" class="form-control input-lg" placeholder="请输入BT名称" id=search_title
+                               style="margin-top:20px;border-radius:10px;width: 150%"/>
+                        <input type="text" class="form-control input-lg hide" placeholder="请输入BT链接" id=input_content
+                               style="margin-top:20px;border-radius:10px;width: 150%"/>
                     </div>
-                </div>
+                </form>
             </div>
-            <div class="container-fluid">
-                <div class="row-fluid">
-                    <div class="input-group" style="margin-top:20px">
-                        <input type="text" class="form-control input-lg" placeholder="请输入BT名称" id=search_title/>
-                        <span class="input-group-btn">
-                        <button class="btn btn-info btn-success" id=search>查找</button>
-                    </span>
-                        <div class="input-group-btn" style="align-content: right">
-                            <a class="btn btn-danger" id=add>新增种子</a>
-                        </div>
-                    </div>
-                </div>
+            <div class="col-md-offset-4 hide " id="btcontainer">
+                <div id=bttitle style="margin-left:20px;text-align: left" ><h3> <font color="#f0ffff"> aaaa</font></h3></div>
+                <div id=content style="margin-left:40px;text-align: left"><font color="#f0ffff"> aaaa</font></div>
+                <div id=author ><font color="#f0ffff"> ssss</font></div>
+            </div>
+            <div class="col" style="margin-top: 20px">
+                <button class="btn btn-info btn-success" id=search
+                        style="margin-right: 20px;padding: 10px;margin-top: 20px">BT查找
+                </button>
+                <a class="btn btn-danger" id=add style="padding: 10px;margin-top: 20px">手气不错</a>
             </div>
 
-
-        </div>
-        <div class="row clearfix">
-            <div class="col-md-12 column">
-            </div>
-        </div>
-
-        <div style="text-align: center">
-            <h1 id=title></h1>
-        </div>
-
-        <div id=content style="margin-left:20px"></div>
-
-        <div id=author style="text-align: right"></div>
-
-        <div id="add_div" style="display: none">
-
-
-            <div class="container-fluid">
-                <div class="row-fluid">
-                    <div class="span12">
-                        <div class="list-group" style="margin-top: 20px">
-                            <a class="list-group-item active">BT共享</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="input-group" style="margin-left:10px">
-                <span class="input-group-addon">标题</span>
-                <input type="text" class="form-control" placeholder="输入BT名称" id=input_title>
-            </div>
-            <div class="input-group" style="margin-top:20px ;margin-left:10px">
-                <span class="input-group-addon">正文</span>
-                <input type="text" class="form-control" placeholder="输入BT链接" id=input_content>
-            </div>
-            <div style="text-align: right;margin-top:30px ">
-                <button class="btn btn-info" id=post>提交</button>
-            </div>
         </div>
     </div>
-
-
-</div>
 </body>
 
 
@@ -101,6 +60,7 @@
     var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
     neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"))
     var isClick = true
+    var isShow=true
 
 
     var NebPay = require("nebpay");     //https://github.com/nebulasio/nebPay
@@ -108,57 +68,78 @@
     var serialNumber
 
     $("#search").click(function () {
-        if (!$("#search_title").val()) {
-            alter('搜索BT名称不能为空');
-            return;
-        }
-
-        $('#btarea').text("");
-        var from = dappContactAddress
-        var value = "0";
-        var nonce = "0"
-        var gas_price = "1000000"
-        var gas_limit = "2000000"
-        var callFunction = "get";
-        var callArgs = "[\"" + $("#search_title").val() + "\"]";
-        console.log(callArgs);
-        var contract = {
-            "function": callFunction,
-            "args": callArgs
-        }
-
-
-        neb.api.call(from, dappContactAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
-            var result = resp.result;
-
-            if (result === 'null') {
-                $('#btarea').text("没有发现该名称的BT种子，你可以马上上传贡献！");
-                $('#bttitle').text("");
-                $('#author').text("");
+        if (isShow) {
+            if (!$("#search_title").val()) {
+                alter('搜索BT名称不能为空');
                 return;
             }
-            console.log(result);
-            result = JSON.parse(result);
-            $("#bttitle").text(result.bttitle);
-            $('#btarea').text("链接:  " + result.btarea);
-            $('#author').text("作者：" + result.author);
 
-        }).catch(function (err) {
-            console.log("error :" + err.message);
 
-        })
+            $('#btarea').text("");
+            var from = dappContactAddress
+            var value = "0";
+            var nonce = "0"
+            var gas_price = "1000000"
+            var gas_limit = "2000000"
+            var callFunction = "get";
+            var callArgs = "[\"" + $("#search_title").val() + "\"]";
+            console.log(callArgs);
+            var contract = {
+                "function": callFunction,
+                "args": callArgs
+            }
+
+
+            neb.api.call(from, dappContactAddress, value, nonce, gas_price, gas_limit, contract).then(function (resp) {
+                var result = resp.result;
+
+                if (result === 'null') {
+                    $('#btarea').text("没有发现该名称的BT种子，你可以马上上传贡献！");
+                    $('#bttitle').text("");
+                    $('#author').text("");
+                    return;
+                }
+                console.log(result);
+                result = JSON.parse(result);
+                $("#bttitle").text(result.bttitle);
+                $('#btarea').text("链接:  " + result.btarea);
+                $('#author').text("作者：" + result.author);
+
+            }).catch(function (err) {
+                console.log("error :" + err.message);
+
+            })
+        }else {
+            $("#input_content").show();
+        }
 
     })
 
     $('#add').click(function () {
         if (isClick) {
             isClick = false;
-            $("#add").text("隐藏新增");
+            $("#add").text("链接提交");
+            $("#input_content").show();
             $("#add_div").show();
         } else {
             isClick = true;
             $("#add_div").hide();
-            $("#add").text("新增种子");
+            if (!$("#input_title").val() || !$("#input_content").val()) {
+                alert('BT标题或链接不能为空');
+                return;
+            }
+            var to = dappContactAddress;
+            var value = "0";
+            var callFunction = "save";
+            var callArgs = "[\"" + $("#input_title").val() + "\",\"" + $("#input_content").val() + "\"]";
+            console.log(callArgs);
+
+            serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
+                listener: function (resp) {
+                    $("#add").text("手气不错");
+                    console.log("thecallback is " + resp)
+                }
+            });
         }
 
     })
