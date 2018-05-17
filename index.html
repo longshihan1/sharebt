@@ -57,7 +57,7 @@
 
 <script>
     "use strict";
-    var dappContactAddress = "n22xW52K72t4JZ36fuRhMNTBLKqaSR4uMPB";
+    var dappContactAddress = "n1s4Guv7HWKPxQdSyeHz91ATdhCtC8hXZqc";
     var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
     neb.setRequest(new nebulas.HttpRequest("https://mainnet.nebulas.io"))
     var isClick = true
@@ -148,7 +148,6 @@
 
             serialNumber = nebPay.call(to, value, callFunction, callArgs, {    //使用nebpay的call接口去调用合约,
                 listener: function (resp) {
-                    $("#add").text("手气不错");
                     console.log("thecallback is " + resp)
                 }
             });
